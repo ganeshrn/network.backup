@@ -118,6 +118,12 @@ spec:
             GH_USER: ${{ parameters.ghUserName }}
             GH_EMAIL: ${{ parameters.ghEmail }}
             backup_file_name: ${{ parameters.backupFileName }}
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish_github.output.repoContentsUrl if parameters.sourceControl == 'github.com' else steps.publish_gitlab.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
   output:
     text:
       - title: >-
