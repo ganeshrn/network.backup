@@ -3,16 +3,18 @@ kind: Template
 
 metadata:
   name: generic-seed
-  title: Create wizard use cases
-  description: Use this template to create actual wizard use case templates
+  title: Create Network Automation Use Case
+  description: >-
+    This template will create a job template and execution environment for the
+    network backup use case
   namespace: default
   tags:
     - aap-operations
     - intermediate
+    - network
 spec:
   owner: RedHat
   type: service
-
   parameters:
     - title: Load network backup use cases
       description: >-
@@ -117,91 +119,91 @@ spec:
         properties:
           useCases: 'Select at least one use case.'
   steps:
-     - id: create-project
-       name: Create project
-       action: rhaap:create-project
-       input:
-         token: ${{ parameters.token }}
-         deleteIfExist: true
-         values:
-            projectName: 'RH AAP Demo Seed Job Template Project'
-            projectDescription: 'RH AAP Demo Seed Job Template Project'
-            organization: ${{ parameters.organization }}
-            scmUrl: ${{ parameters.scmUrl }}
-            scmBranch: ${{ parameters.scmBranch }}
-            scmUpdateOnLaunch: true
-     - id: create-ee
-       name: Create execution environment
-       action: rhaap:create-execution-environment
-       input:
-         token: ${{ parameters.token }}
-         deleteIfExist: true
-         values:
-           environmentName: 'RH AAP Demo Seed Job Template execution environment'
-           organization: ${{ parameters.organization }}
-           image: 'quay.io/portal_mvp_patterns/ansible-pattern-loader:latest'
-           pull: always
-     - id: create-template
-       name: Create job template
-       action: rhaap:create-job-template
-       input:
-         token: ${{ parameters.token }}
-         deleteIfExist: true
-         values:
-           templateName: 'RH AAP Demo Seed Job Template'
-           templateDescription: 'RH AAP Demo Seed Job Template'
-           project: ${{steps['create-project'].output.project }}
-           organization: ${{ parameters.organization }}
-           jobInventory: ${{ parameters.jobInventory }}
-           playbook: ${{ parameters.playbook }}
-           executionEnvironment: ${{steps['create-ee'].output.executionEnvironment }}
-           extraVariables:
-             aap_hostname: ${{ parameters.aapHostName }}
-             aap_token: ${{ parameters.token }}
-             usecases: ${{ parameters.useCases }}
-             seed_usecase: ${{ parameters.useCases | useCaseNameFilter }}
-             organization: ${{ parameters.organization | resourceFilter('name')}}
-     - id: launch-job
-       name: Launch job template
-       action: rhaap:launch-job-template
-       input:
-         token: ${{ parameters.token }}
-         values:
-           template: ${{steps['create-template'].output.template}}
-     - id: clean-up
-       name: Clean up
-       action: rhaap:clean-up
-       input:
-         token: ${{ parameters.token }}
-         values:
-           project: ${{steps['create-project'].output.project }}
-           executionEnvironment: ${{steps['create-ee'].output.executionEnvironment }}
-           template: ${{steps['create-template'].output.template }}
-     - id: create-showcase
-       name: Create showcases
-       action: rhaap:create-show-cases
-       input:
-         token: ${{ parameters.token }}
-         values:
-           organization: ${{ parameters.organization }}
-           scmType: ${{ parameters.scmType }}
-           useCases: ${{ parameters.useCases }}
-     - id: inject_aap_config
-       name: Inject AAP Config
-       action: aap:injectAppConfig
-     - id: catalogTemplate
-       name: Generating the Catalog Info Component
-       action: fetch:template
-       input:
-         url: ./skeleton/
-         values:
-           devSpacesBaseUrl: ${{ steps.inject_aap_config.output.devSpacesBaseUrl }}
-     - id: register
-       name: Register catalog component
-       action: catalog:register
-       input:
-         repoContentsUrl: ${{ parameters.useCases[0].url }}
-         catalogInfoPath: '/catalog-info.yaml'
+    - id: create-project
+      name: Create project
+      action: rhaap:create-project
+      input:
+        token: ${{ parameters.token }}
+        deleteIfExist: true
+        values:
+          projectName: 'RH AAP Demo Seed Job Template Project'
+          projectDescription: 'RH AAP Demo Seed Job Template Project'
+          organization: ${{ parameters.organization }}
+          scmUrl: ${{ parameters.scmUrl }}
+          scmBranch: ${{ parameters.scmBranch }}
+          scmUpdateOnLaunch: true
+    - id: create-ee
+      name: Create execution environment
+      action: rhaap:create-execution-environment
+      input:
+        token: ${{ parameters.token }}
+        deleteIfExist: true
+        values:
+          environmentName: 'RH AAP Demo Seed Job Template execution environment'
+          organization: ${{ parameters.organization }}
+          image: 'quay.io/portal_mvp_patterns/ansible-pattern-loader:latest'
+          pull: always
+    - id: create-template
+      name: Create job template
+      action: rhaap:create-job-template
+      input:
+        token: ${{ parameters.token }}
+        deleteIfExist: true
+        values:
+          templateName: 'RH AAP Demo Seed Job Template'
+          templateDescription: 'RH AAP Demo Seed Job Template'
+          project: ${{steps['create-project'].output.project }}
+          organization: ${{ parameters.organization }}
+          jobInventory: ${{ parameters.jobInventory }}
+          playbook: ${{ parameters.playbook }}
+          executionEnvironment: ${{steps['create-ee'].output.executionEnvironment }}
+          extraVariables:
+            aap_hostname: ${{ parameters.aapHostName }}
+            aap_token: ${{ parameters.token }}
+            usecases: ${{ parameters.useCases }}
+            seed_usecase: ${{ parameters.useCases | useCaseNameFilter }}
+            organization: ${{ parameters.organization | resourceFilter('name')}}
+    - id: launch-job
+      name: Launch job template
+      action: rhaap:launch-job-template
+      input:
+        token: ${{ parameters.token }}
+        values:
+          template: ${{steps['create-template'].output.template}}
+    - id: clean-up
+      name: Clean up
+      action: rhaap:clean-up
+      input:
+        token: ${{ parameters.token }}
+        values:
+          project: ${{steps['create-project'].output.project }}
+          executionEnvironment: ${{steps['create-ee'].output.executionEnvironment }}
+          template: ${{steps['create-template'].output.template }}
+    - id: create-showcases
+      name: Create showcases
+      action: rhaap:create-show-cases
+      input:
+        token: ${{ parameters.token }}
+        values:
+          organization: ${{ parameters.organization }}
+          scmType: ${{ parameters.scmType }}
+          useCases: ${{ parameters.useCases }}
+    - id: inject_aap_config
+      name: Inject AAP Config
+      action: aap:injectAppConfig
+    - id: catalogTemplate
+      name: Generate network backup usecase component
+      action: fetch:template
+      input:
+        url: ./skeleton/
+        values:
+          devSpacesBaseUrl: ${{ steps.inject_aap_config.output.devSpacesBaseUrl }}
+    - id: register
+      name: Register network backup usecase component
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ parameters.useCases[0].url }}
+        catalogInfoPath: '/catalog-info.yaml'
   output:
     text:
       - title: 'Job generic seed template executed successfully'
