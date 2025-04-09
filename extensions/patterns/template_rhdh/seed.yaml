@@ -95,7 +95,7 @@ spec:
             type: object
             enum:
               - name: network
-                url: https://github.com/redhat-cop/network.backup
+                url: https://github.com/ganeshrn/network.backup
                 version: main
             enumNames:
               - Network
@@ -202,7 +202,7 @@ spec:
       name: Register network backup usecase component
       action: catalog:register
       input:
-        repoContentsUrl: ${{ parameters.useCases[0].url }}
+        repoContentsUrl: ${{ parameters.useCases[0].url }}/blob/main
         catalogInfoPath: '/catalog-info.yaml'
   output:
     text:
