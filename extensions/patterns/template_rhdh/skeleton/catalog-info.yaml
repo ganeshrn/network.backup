@@ -3,7 +3,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: network.backup
-  description: Ansible network backup pattern
+  description: Ansible network backup patterns
   tags:
     - ansible
     - collection
