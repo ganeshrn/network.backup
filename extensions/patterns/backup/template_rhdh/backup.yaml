@@ -118,13 +118,18 @@ spec:
             GH_USER: ${{ parameters.ghUserName }}
             GH_EMAIL: ${{ parameters.ghEmail }}
             backup_file_name: ${{ parameters.backupFileName }}
-    - id: fetch
-      name: Fetch Template
-      action: fetch:plain
+    - id: inject_aap_config
+      name: Inject AAP Config
+      action: aap:injectAppConfig
+    - id: catalogTemplate
+      name: Generating the Catalog Info Component
+      action: fetch:template
       input:
-        url: ./skeleton
+        url: ./skeleton/
+        values:
+          devSpacesBaseUrl: ${{ steps.inject_aap_config.output.devSpacesBaseUrl }}
     - id: register
-      name: Register
+      name: Register catalog component
       action: catalog:register
       input:
         catalogInfoPath: '/catalog-info.yaml'

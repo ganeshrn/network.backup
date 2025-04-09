@@ -11,7 +11,7 @@ metadata:
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug: ganeshrn/network.backup
   links:
-    - url: {{ config.ansible.devSpaces.baseUrl }}/#https://github.com/ganeshrn/network.backup
+    - url: ${{ values.devSpacesBaseUrl }}/#https://github.com/ganeshrn/network.backup
       title: Open Ansible network backup pattern project in OpenShift Dev Spaces
       icon: web
 spec:
