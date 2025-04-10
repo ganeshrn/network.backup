@@ -8,6 +8,10 @@ metadata:
     This template will create a job template and execution environment for the
     network backup use case
   namespace: default
+  links:
+    - title: Open Ansible network pattern project in OpenShift Dev Spaces
+      url: https://devspaces.apps.ansible-rhdh.testing.ansible.com/#https://github.com/ganeshrn/network.backup
+      icon: web
   tags:
     - aap-operations
     - intermediate
